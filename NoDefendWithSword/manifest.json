@@ -1,0 +1,10 @@
+{
+  "Name": "NoDefendWithSword",
+  "Author": "DiscipleOfEris",
+  "Version": "1.0.0",
+  "Description": "Disable the defend action when wielding a sword, for those who accidentally activate it too often.",
+  "UniqueID": "DiscipleOfEris.NoDefendWithSword",
+  "EntryDll": "NoDefendWithSword.dll",
+  "MinimumApiVersion": "3.0.0",
+  "UpdateKeys": []
+}
