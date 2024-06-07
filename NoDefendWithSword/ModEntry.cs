@@ -1,10 +1,7 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 using StardewModdingAPI;
-using StardewModdingAPI.Events;
-using StardewModdingAPI.Utilities;
-using StardewValley;
-using Harmony;
+using StardewValley.Tools;
+using HarmonyLib;
 
 namespace NoDefendWithSword
 {
@@ -20,10 +17,10 @@ namespace NoDefendWithSword
         {
             MeleeWeaponPatches.Initialize(this.Monitor);
 
-            var harmony = HarmonyInstance.Create(this.ModManifest.UniqueID);
+            var harmony = new Harmony(ModManifest.UniqueID);
 
             harmony.Patch(
-                original: AccessTools.Method(typeof(StardewValley.Tools.MeleeWeapon), nameof(StardewValley.Tools.MeleeWeapon.animateSpecialMove)),
+                original: AccessTools.Method(typeof(MeleeWeapon), nameof(MeleeWeapon.animateSpecialMove)),
                 prefix: new HarmonyMethod(typeof(MeleeWeaponPatches), nameof(MeleeWeaponPatches.animateSpecialMove_Prefix))
             );
         }
@@ -50,11 +47,15 @@ namespace NoDefendWithSword
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         /// 
-        public static bool animateSpecialMove_Prefix(StardewValley.Tools.MeleeWeapon __instance, StardewValley.Farmer who)
+        public static bool animateSpecialMove_Prefix(MeleeWeapon __instance, StardewValley.Farmer who)
         {
             try
             {
-                if (__instance.type != StardewValley.Tools.MeleeWeapon.defenseSword || __instance.parentSheetIndex == StardewValley.Tools.MeleeWeapon.scythe || __instance.Name.Contains("Scythe"))
+                if (__instance.type.Value != MeleeWeapon.defenseSword
+                    || __instance.ItemId == MeleeWeapon.scytheId
+                    || __instance.ItemId == MeleeWeapon.goldenScytheId
+                    || __instance.ItemId == MeleeWeapon.iridiumScytheID
+                    || __instance.Name.Contains("Scythe"))
                     return true;
 
                 return false;
